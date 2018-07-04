@@ -1,0 +1,74 @@
+<template>
+  <view class="main">
+    <view class="banner">
+      <image src="/images/list1.png"></image>
+    </view>
+    <view class="list-box">
+      <productList :list="productList"></productList>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import productList from '@/components/productList'
+  export default class Cart extends wepy.page {
+    config = {
+      navigationBarTitleText: 'xxx列表'
+    };
+    data = {
+      //产品列表
+      productList:[
+        {name:'瓜子',price:'2.70',id:1,src:'/images/s4.png'},
+        {name:'芹菜',price:'1.20',id:2,src:'/images/s5.png'},
+        {name:'素米',price:'1.40',id:3,src:'/images/s6.png'}
+      ],
+      title:''
+    };
+    onLoad(options){
+      let type = options.type
+      console.log(type,555)
+      if(type == 1){
+        this.title = '美味水果'
+        console.log('1111')
+      }else if(type == 2){
+        this.title = '新品首发'
+      }else if(type == 3){
+          this.title = '热卖爆品'
+      }
+    };
+    components = {
+      productList:productList
+    }
+  }
+</script>
+<style lang="less">
+  .banner image{
+    width: 100%;
+    height: ~'400rpx';
+  }
+  .list-box{
+    padding: ~'30rpx 20rpx';
+  }
+  .newest-list{
+    display: inline-block;
+    width: ~'347rpx';
+    height: ~'347rpx';
+    margin:~'0 15rpx 10rpx 0';
+    border-radius: ~'10px';
+    text-align: center;
+    background: #f5f6f5;
+  }
+  .newest-list:nth-child(2n){
+    margin-right: 0;
+  }
+  .newest-list image{
+    width: ~'180rpx';
+    height: ~'180rpx';
+    margin: ~'30rpx 0 20rpx';
+  }
+  .newest-list .newest-text{
+    font-size: ~'32rpx';
+    line-height: ~'45rpx';
+  }
+</style>

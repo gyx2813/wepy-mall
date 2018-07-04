@@ -1,0 +1,100 @@
+<template>
+  <!--顶部banner-->
+  <swiper indicator-dots="true" autoplay="true" interval="{{ interval }}" duration="{{ duration }}" circular="true" indicator-active-color="#fff">
+    <repeat for="{{imgUrls}}">
+      <swiper-item>
+        <image src="{{item.src}}" class="slide-image" width="100%" data-id="{{item.id}}" @tap="linkUrl"/>
+      </swiper-item>
+    </repeat>
+  </swiper>
+  <!--精选主题-->
+  <view class="selected">
+    <view class="select-title"><text>精选主题</text></view>
+    <view class="select-top">
+      <view class="select-top-small">
+        <navigator url="list?type=1">
+          <image src="/images/s1.png"></image>
+        </navigator>
+      </view>
+      <view class="select-top-small">
+        <navigator url="list?type=2">
+          <image src="/images/s2.png"></image>
+        </navigator>
+      </view>
+    </view>
+    <view class="select-bottom">
+      <navigator url="list?type=3">
+        <image src="/images/s3.png"></image>
+      </navigator>
+    </view>
+  </view>
+  <!--最新产品-->
+  <view class="newest">
+    <view class="newest-title"><text>最近新品</text></view>
+    <view class="newest-box">
+      <productList :list="productList"></productList>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import productList from '@/components/productList'
+  export default class Index extends wepy.page {
+    data = {
+      //banner列表
+      imgUrls: [
+        { src:'/images/b1.jpg',id:1 },
+        { src:'/images/b2.jpg',id:2 },
+        { src:'/images/b3.jpg',id:3 }
+      ],
+      indicatorDots: false,
+      autoplay: false,
+      interval: 3000,
+      duration: 800,
+      //产品列表
+      productList:[
+        {name:'瓜子',price:'2.70',id:1,src:'/images/s4.png'},
+        {name:'芹菜',price:'1.20',id:2,src:'/images/s5.png'},
+        {name:'素米',price:'1.40',id:3,src:'/images/s6.png'}
+      ]
+    };
+    components = {
+      productList:productList
+    }
+  }
+</script>
+<style lang="less">
+  swiper {
+    height: ~'421.5rpx';
+  }
+  swiper-item image {
+    width: 100%;
+    height: 100%;
+  }
+  .select-title,.newest-title{
+    width: 100%;
+    padding:~'30rpx 0';
+    color: #AB956D;
+    font-size: 16px;
+    text-align: center;
+  }
+  .select-top-small{
+    width: ~'375rpx';
+    height: ~'375rpx';
+    float: left;
+  }
+  .select-bottom,.select-top{
+    width: 100%;
+    height: ~'375rpx';
+  }
+  .select-top-small image,.select-bottom image,.select-top-small navigator,.select-bottom navigator{
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .newest-box{
+    padding:~'0 40rpx';
+  }
+</style>

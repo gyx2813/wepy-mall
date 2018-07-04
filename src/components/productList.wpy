@@ -1,0 +1,42 @@
+<template>
+  <repeat for="{{list}}">
+    <navigator class="newest-list" data-goodsid="{{item.id}}" url="goodDetail">
+      <image src="{{item.src}}"></image>
+      <view class="newest-text"><text>{{item.name}}</text></view>
+      <view class="newest-text"><text>￥{{item.price}}</text></view>
+    </navigator>
+  </repeat>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class productList extends wepy.component {
+    props = {
+      list: {
+        type: Array,
+        default:[]
+      }
+    }
+  }
+</script>
+<style lang="less">
+  .newest-list{
+    display: inline-block;
+    width: ~'325rpx';
+    height: ~'325rpx';
+    margin:~'0 20rpx 20rpx 0';
+    border-radius: 10px;
+    text-align: center;
+    background: #f5f6f5;
+  }
+  .newest-box .newest-list:nth-child(2n){
+    margin-right: 0;
+  }
+  .newest-box .newest-list image{
+    width: ~'175rpx';
+    height: ~'175rpx';
+    margin: ~'20rpx 0 10rpx';
+  }
+  .newest-box .newest-list .newest-text{
+    font-size: ~'32rpx';
+  }
+</style>
