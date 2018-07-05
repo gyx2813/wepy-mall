@@ -1,0 +1,45 @@
+/* theme color */
+@black: #000;
+@white: #fff;
+@yellowGreen: #8EC31F;
+@red: #FF5252;
+@yellow: #FFe57F;
+@orange: #FFB152;
+@lightGreen: #96D0B6;
+@navyBlue: #A0D8Ef;
+
+
+/* font color */
+@999: #999;
+@666: #666;
+@333: #333;
+@ccc: #ccc;
+@CCC: @ccc;
+@ddd: #ddd;
+@DDD: @ddd;
+@fff: #fff;
+@FFF: @fff;
+@eee: #eee;
+@EEE: @eee;
+/* minx部分 */
+/* 宽高 */
+.wh(@width,@height){
+  width: @width;
+  height: @height
+}
+/* 字体大小颜色 */
+.sc(@fontSize,@color){
+  font-size: @fontSize;
+  color: @color
+}
+/* 背景图 */
+.background(@url){
+  background: url(@url) no-repeat center;
+  background-size:100%;
+}
+
+/* 行高对齐 */
+.lineHeight(@height,@lineheight){
+  height: @height;
+  line-height: @lineheight;
+}

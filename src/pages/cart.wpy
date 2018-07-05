@@ -4,8 +4,8 @@
       <view>
         <repeat for="{{carts}}">
           <view class="cart-list">
-            <icon wx:if="{{item.selected}}" type="success" color="#AB956D" data-index="{{index}}"  class="cart-pro-select" @tap="selectList"/>
-            <icon wx:else type="circle" class="cart-pro-select" data-index="{{index}}" @tap="selectList"/>
+            <icon wx:if="{{item.selected}}" type="success" color="#AB956D" data-index="{{index}}" data-id="{{item.id}}" class="cart-pro-select" @tap="selectList"/>
+            <icon wx:else type="circle" class="cart-pro-select" data-index="{{index}}" data-id="{{item.id}}" @tap="selectList"/>
             <navigator url="../details/details?id={{item.id}}"><image class="cart-thumb" src="{{item.src}}"></image></navigator>
             <text class="cart-pro-name">{{item.title}}</text>
             <text class="cart-pro-price">￥{{item.price}}</text>
@@ -41,6 +41,7 @@
     };
     data = {
       carts:[],               // 购物车列表
+      selectedArr:[],
       hasList:false,          // 列表是否有数据
       totalPrice:0,           // 总价，初始为0
       selectAllStatus:false    // 全选状态，默认全选
@@ -57,10 +58,17 @@
        * 当前商品选中事件
        */
       selectList(e) {
-        const index = e.currentTarget.dataset.index;
+        let index = e.currentTarget.dataset.index;
         let carts = this.data.carts;
-        const selected = carts[index].selected;
-        carts[index].selected = !selected;
+        let selected = carts[index].selected;
+        if(selected){
+          carts[index].selected = false
+          this.selectedArr.splice(index,1)
+          this.selectAllStatus = false
+        }else{
+          carts[index].selected = true
+          this.selectedArr.push(e.target.dataset.id)
+        }
         this.carts = carts
         this.getTotalPrice();
       },
@@ -138,6 +146,17 @@
       }
       this.carts = carts                            // 最后赋值到data中渲染到页面
       this.totalPrice = total.toFixed(2)
+    };
+    watch = {
+      selectedArr(newval){
+        if(newval>=this.carts.length){
+          this.selectAllStatus = true
+          console.log('11111')
+        }else{
+          this.selectAllStatus = false
+          console.log('00000')
+        }
+      }
     }
   }
 </script>

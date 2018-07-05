@@ -32,8 +32,41 @@
       </view>
     </view>
   </view>
-  <wxc-popup class="J_Popup" animation-mode="bottom" align="bottom">
-    <view class="popup__content">hello world!</view>
+  <wxc-popup class="J_Popup" animation-mode="bottom" align="bottom" locked="true" status="hide">
+    <view class="popup__content">
+      <view class="top-item">
+        <view class="img-box"><image src="/images/goods1.png" class="image"></image></view>
+        <view class="detail">
+          <text class="price">￥128.00</text>
+          <text class="stock">库存720件</text>
+          <text wx:if="{{!selected}}" class="select">请选择：尺码 颜色</text>
+          <text wx:else class="select">已选择：{{pro1}} {{pro2}}</text>
+        </view>
+      </view>
+      <!--sku属性-->
+      <view class="pro-item">
+        <view class="pro">尺码</view>
+        <view class="pro-list">
+          <repeat for="{{goods.sku[0].size}}">
+              <text data-index="{{index}}" data-item="{{item}}" class="pro-text {{ selIndex == index ? 'on' : ''}}" @tap="selectPro">{{item}}</text>
+          </repeat>
+        </view>
+      </view>
+      <view class="pro-item">
+        <view class="pro">颜色</view>
+        <view class="pro-list">
+          <repeat for="{{goods.sku[1].color}}">
+              <text data-index="{{index}}" data-item="{{item}}" class="pro-text {{ proIndex == index ? 'on' : ''}}" @tap="selectPro2">{{item}}</text>
+          </repeat>
+        </view>
+      </view>
+      <!--数量-->
+      <view class="counter">
+        <text class="num-tip">数量</text>
+        <wxc-counter number="1" max="{{720}}" min="1" bind:changenumber="onChangeNumber"></wxc-counter>
+      </view>
+      <button class="btn" type="warn" size="default" @tap="hidePopup">确定</button>
+    </view>
   </wxc-popup>
 </template>
 
@@ -43,7 +76,8 @@
     config = {
       navigationBarTitleText: 'XXX产品',
       usingComponents: {
-        'wxc-popup': '../../packages/@minui/wxc-popup/dist/index'
+        'wxc-popup': '../../packages/@minui/wxc-popup/dist/index',
+        'wxc-counter': '../../packages/@minui/wxc-counter/dist/index'
       }
     };
     data = {
@@ -51,18 +85,28 @@
         id: 1,
         image: '/images/goods1.png',
         title: '新鲜梨花带雨',
-        price: 0.01,
+        price: 128.00,
         stock: '有货',
         detail: '这里是梨花带雨详情。',
         parameter: '125g/个',
-        service: '不支持退货'
+        service: '不支持退货',
+        sku:[
+          { size:['M','L','XL','2XL','3XL','4XL'] },
+          { color:['红色','黄色','橙色','墨绿色','白色','灰色'] }
+        ]
       },
       num: 1,
       totalNum: 0,
       hasCarts: false,
       curIndex: 0,
       show: false,
-      scaleCart: false
+      scaleCart: false,
+      //sku选择
+      selIndex:null,
+      proIndex:null,
+      selected:false,
+      pro1:'',
+      pro2:''
     };
     methods = {
       //数量增加
@@ -87,25 +131,71 @@
           }, 200)
         }, 300)
       },
+      selectPro(e){
+        this.selected = true
+        this.selIndex = e.target.dataset.index;
+        this.pro1 = e.target.dataset.item
+      },
+      selectPro2(e){
+        this.selected = true
+        this.proIndex = e.target.dataset.index;
+        this.pro2 = e.target.dataset.item
+      },
       bindTap(e) {
         let index = parseInt(e.currentTarget.dataset.index);
         this.curIndex = index
       },
       showPopup(){
-          console.log(1111)
-        let $popup = this.$wxpage.selectComponent('.J_Popup')
-        $popup && $popup.show()
+        let popup = this.$wxpage.selectComponent('.J_Popup')
+        popup.show()
       },
+      hidePopup(){
+        let popup = this.$wxpage.selectComponent('.J_Popup')
+        popup.hide()
+      }
     }
   }
 </script>
 <style lang="less">
+   @import '../common/less/base';
   .popup__content {
     width: 100%;
-    height: ~'500rpx';
-    line-height: ~'500rpx';
     background: #ffffff;
-    text-align: center;
+    padding: ~'0 20rpx';
+    .top-item{
+      width:100%;
+      height:~'140rpx';
+      position: relative;
+      .price{.sc(~'36rpx',@red)}
+      .stock{.sc(~'28rpx',@999)}
+      .select{.sc(~'28rpx',@999)}
+      .img-box{width:~'200rpx';height:~'200rpx';border: 2px solid #fff;
+        margin-top:~'-60rpx';
+        -webkit-border-radius:3px;
+        -moz-border-radius:3px;
+        border-radius:3px;
+        position: absolute;
+        .image{width:100%;height:100%}}
+      .detail{display: flex;flex-direction:column;margin-left: ~'220rpx';padding: ~'10rpx 0'}
+    }
+    .pro-item{
+      padding:~'30rpx 0 0 0';
+      .pro{.sc(~'30rpx',@333);padding-bottom:~'20rpx';}
+      .pro-list{
+        display: flex;flex-direction: row;
+        .pro-text:first-child{margin-left:0}
+        .pro-text{.sc(~'28rpx',@333);padding:~'10rpx 20rpx';background:@eee;margin-left:~'15rpx';border-radius:3px}
+        .pro-text.on{background:@red;color:#fff;}
+      }
+    }
+    .counter{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: ~'30rpx 0 30rpx 0';
+      .num-tip{.sc(~'30rpx',@333)}
+    }
+    .btn{margin-bottom:~'20rpx';}
   }
   .goods-box{
     position: relative;
