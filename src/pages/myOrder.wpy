@@ -1,0 +1,195 @@
+<template>
+  <view class="main">
+    <view class="goods-tab-box">
+      <view class="goods-tab-nav {{curIndex === 0 ?'on':''}}" @tap="bindTap" data-index="0">全部</view>
+      <view class="goods-tab-nav {{curIndex === 1 ?'on':''}}" @tap="bindTap" data-index="1">待付款</view>
+      <view class="goods-tab-nav {{curIndex === 2 ?'on':''}}" @tap="bindTap" data-index="2">待发货</view>
+      <view class="goods-tab-nav {{curIndex === 3 ?'on':''}}" @tap="bindTap" data-index="3">待收货</view>
+      <scroll-view class="goods-content" scroll-y lower-threshold="50" @scrolltolower="lower">
+        <view wx:if="{{curIndex === 0}}">
+          <view class="order-box">
+            <view class="head"><text class="shopName">子恒与子文的小店 ></text><text class="orderState">待付款</text></view>
+            <view class="goods-box">
+              <view class="img-box"><image src="../images/goods1.png"></image></view>
+              <view class="detail">
+                <text class="goods-name">蕾丝连衣裙女夏2018款大码</text>
+                <text class="goods-pro">颜色：白色-尺码：M</text>
+                <view class="goods-price"><text>￥175.00</text><text class="num">×1</text></view>
+              </view>
+            </view>
+            <view class="goods-box">
+              <view class="img-box"><image src="../images/s4.png"></image></view>
+              <view class="detail">
+                <text class="goods-name">条纹青中年衬衫长袖宽松</text>
+                <text class="goods-pro">颜色：红色-尺码：L</text>
+                <view class="goods-price"><text>￥186.00</text><text class="num">×1</text></view>
+              </view>
+            </view>
+            <view class="total"><text>共计2件商品 合计：￥</text><text class="price">361.00</text><text>(含运费￥0)</text></view>
+            <view class="btn-box">
+              <button type="default" size="mini" plain="true" class="btn-pri">立即付款</button>
+              <button class="btn-info" type="default" size="mini" plain="true" @tap="showPop" data-state="1">取消订单</button>
+            </view>
+          </view>
+          <view class="order-box">
+            <view class="head"><text class="shopName">马明阳的小店 ></text><text class="orderState">交易关闭</text></view>
+            <view class="goods-box">
+              <view class="img-box"><image src="../images/goods1.png"></image></view>
+              <view class="detail">
+                <text class="goods-name">什么定西阿达的测试阿达</text>
+                <text class="goods-pro">颜色：白色-尺码：M</text>
+                <view class="goods-price"><text>￥144.00</text><text class="num">×1</text></view>
+              </view>
+            </view>
+            <view class="total"><text>共计1件商品 合计：￥</text><text class="price">144.00</text><text>(含运费￥0)</text></view>
+            <view class="btn-box">
+              <button class="btn-info" type="default" size="mini" plain="true" @tap="showPop" data-state="2">删除订单</button>
+            </view>
+          </view>
+        </view>
+        <view wx:if="{{curIndex === 1}}">待付款</view>
+        <view wx:if="{{curIndex === 2}}">带发货</view>
+        <view wx:if="{{curIndex === 3}}">待收货</view>
+        <view wx:if="{{isShow}}" class="noMore">没有更多了</view>
+      </scroll-view>
+      <wxc-dialog class="wxc-dialog" title="提示" content="{{content}}" confirm-text="确定" cancel-text="取消" @confirm="onConfirm" @cancel="hidePop"></wxc-dialog>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import productList from '@/components/productList'
+  export default class myOrder extends wepy.page {
+    config = {
+      navigationBarTitleText: '我的订单',
+      onReachBottomDistance:50,
+      usingComponents: {
+        'wxc-dialog': '../../packages/@minui/wxc-dialog/dist/index'
+      }
+    };
+    data = {
+      curIndex: 0,
+      isShow:false,
+      //弹窗
+      content:'',
+      state:null
+    };
+    methods = {
+      bindTap(e) {
+        let index = parseInt(e.currentTarget.dataset.index);
+        this.curIndex = index
+      },
+      lower(){
+        this.isShow = true
+      },
+      showPop(e){
+        this.state = e.target.dataset.state
+        //console.log(typeof this.state)
+        if(this.state == 1){
+          this.content = '确定取消订单嘛？'
+        }else if(this.state == 2){
+          this.content = '确定删除订单嘛？'
+        }
+        let dialogComponent = this.$wxpage.selectComponent('.wxc-dialog')
+        dialogComponent && dialogComponent.show();
+      },
+      hidePop(){
+        let dialogComponent = this.$wxpage.selectComponent('.wxc-dialog')
+        dialogComponent && dialogComponent.hide();
+      },
+      onConfirm(){
+        if(this.state == 1){
+          console.log('确定取消！')
+        }else if(this.state == 2){
+          console.log('确定删除！')
+        }
+      }
+    }
+    components = {
+      productList:productList
+    }
+  }
+</script>
+<style lang="less">
+  @import "../common/less/base";
+  .goods-tab-box{height:100%;}
+  .goods-content{
+    width:100%;
+    height:~'calc(100% - 90rpx)';
+    background:@f2;
+    .order-box:first-child{margin-top:0;}
+    .noMore{.sc(~'24rpx',@333);padding:~'20rpx 0';text-align:center;}
+  }
+  .order-box{
+    width:100%;
+    background:@fff;
+    margin-top: ~'20rpx';
+    .head{width:100%;padding:~'16rpx 20rpx';
+      display: flex;
+      justify-content: space-between;
+      box-sizing: border-box;
+      .shopName{.sc(~'26rpx',@333)}
+      .orderState{.sc(~'26rpx',@red)}
+    }
+    .goods-box{
+      background: @fa;
+      padding:~'20rpx';
+      display: flex;
+      position: relative;
+      border-top:~'5rpx solid #fff';
+      .img-box{.wh(~'200rpx',~'200rpx');margin-right:~'20rpx';image{width:100%;height:100%}}
+      .detail{
+        display:flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .goods-name{
+          .sc(~'26rpx',@333)
+        }
+        .goods-pro{
+          .sc(~'24rpx',@999)
+        }
+        .goods-price{
+          display: flex;
+          justify-content: space-between;
+          .sc(~'26rpx',@red);
+          .num{
+            .sc(~'30rpx',@999);
+            position: absolute;
+            bottom: ~'20rpx';
+            right:~'20rpx';
+          }
+        }
+      }
+    }
+    .total{
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      padding: ~'20rpx';
+      border-bottom: ~'1rpx solid #eee';
+      .sc(~'24rpx',@333);
+      .price{.sc(~'28rpx',@red)}
+    }
+    .btn-box{
+      padding: ~'20rpx';
+      height: ~'62rpx';
+      .btn-info{border:1px solid @ddd;float: right}
+      .btn-pri{border:1px solid @themeColor;margin-left:~'20rpx';color:@themeColor;float: right}
+    }
+  }
+  .goods-tab-nav{
+    display: inline-block;
+    width: 25%;
+    height: ~'90rpx';
+    line-height: ~'90rpx';
+    border-bottom: 1px solid #ededed;
+    box-sizing: border-box;
+    text-align: center;
+    color: #c7c7cb;
+  }
+  .goods-tab-nav.on{
+    color: #bcaa8a;
+    border-bottom: ~'5rpx solid #bcaa8a';
+  }
+</style>

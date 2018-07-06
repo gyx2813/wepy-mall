@@ -7,22 +7,7 @@
       <open-data class="nickname" type="userNickName"></open-data>
       <text class="about">关于我们</text>
     </view>
-    <myList></myList>
-    <!--<view class="list-wrap">-->
-      <!--<view class="list-item">-->
-        <!--<wxc-list-->
-          <!--class="item"-->
-          <!--icon="help"-->
-          <!--icon-color="#69A0DD"-->
-          <!--title="客服与帮助"></wxc-list>-->
-        <!--<wxc-list-->
-          <!--class="item"-->
-          <!--icon="feedback"-->
-          <!--icon-color="#69A0DD"-->
-          <!--mode="none"-->
-          <!--title="意见反馈"></wxc-list>-->
-      <!--</view>-->
-    <!--</view>-->
+    <myList @go.user="go"></myList>
   </view>
 </template>
 
@@ -54,6 +39,13 @@
             self.$apply()
           }
         })
+      },
+      go(title){
+        if(title === '我的订单'){
+          wx.navigateTo({
+            url:'myOrder'
+          })
+        }
       }
     }
 //    onLoad() {

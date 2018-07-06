@@ -41,6 +41,10 @@
   import wepy from 'wepy'
   import productList from '@/components/productList'
   export default class Index extends wepy.page {
+    config = {
+      backgroundTextStyle: 'dark',
+      enablePullDownRefresh: true
+    }
     data = {
       //banner列表
       imgUrls: [
@@ -59,6 +63,9 @@
         {name:'素米',price:'1.40',id:3,src:'/images/s6.png'}
       ]
     };
+//    onPullDownRefresh = function(){
+//      setTimeout(wx.stopPullDownRefresh(),3000)
+//    }
     components = {
       productList:productList
     }

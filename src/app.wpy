@@ -1,13 +1,13 @@
 <style lang="less">
-.container {
-  height: 100%;
-  font-size:~'32rpx';
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
+  page {
+    height: 100%;
+    font-size:~'32rpx';
+    box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    .main{
+      height:100%;
+    }
+  }
 </style>
 
 <script>
@@ -17,13 +17,17 @@ import 'wepy-async-function'
 
 export default class extends wepy.app {
   config = {
+    usingComponents: {
+      'wxc-flex': '../packages/@minui/wxc-flex/dist/index',
+    },
     pages: [
       'pages/index',
       'pages/category',
       'pages/cart',
       'pages/user',
+      'pages/list',
       'pages/goodDetail',
-      'pages/list'
+      'pages/myOrder'
     ],
     window: {
       backgroundTextStyle: 'light',
