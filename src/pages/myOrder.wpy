@@ -113,7 +113,8 @@
 </script>
 <style lang="less">
   @import "../common/less/base";
-  .goods-tab-box{height:100%;}
+  .goods-tab-box{height:100%;
+    background: @fff;}
   .goods-content{
     width:100%;
     height:~'calc(100% - 90rpx)';

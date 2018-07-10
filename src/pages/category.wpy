@@ -1,5 +1,5 @@
 <template>
-  <view class="main">
+  <view class="main category">
     <view class="categroy-left">
       <repeat for="{{ category }}">
         <view data-id="{{item.id}}" data-index="{{index}}" @tap="switchTab" class="cate-list {{curIndex === index ? 'on' : ''}}">
@@ -7,6 +7,16 @@
         </view>
       </repeat>
     </view>
+    <scroll-view class="categroy-right" scroll-y="{{isScroll}}" scroll-into-view="{{toView}}" scroll-with-animation="true">
+      <view class="cate-box">
+        <repeat for="{{detail}}">
+          <view class="cate">
+            <image src="{{item.src}}"></image>
+            <text class="cate-title">{{item.name}}</text>
+          </view>
+        </repeat>
+      </view>
+    </scroll-view>
   </view>
 </template>
 
@@ -25,9 +35,28 @@
         {name:'粗茶',id:'cucha'},
         {name:'淡饭',id:'danfan'}
       ],
-      detail:[],
+      detail:[
+        { name:'苹果',src:'/images/s4.png',id:1},
+        { name:'梨',src:'/images/s5.png',id:2},
+        { name:'橘子',src:'/images/s6.png',id:3},
+        { name:'苹果',src:'/images/s4.png',id:1},
+        { name:'梨',src:'/images/s5.png',id:2},
+        { name:'橘子',src:'/images/s6.png',id:3},
+        { name:'苹果',src:'/images/s4.png',id:1},
+        { name:'梨',src:'/images/s5.png',id:2},
+        { name:'橘子',src:'/images/s6.png',id:3},
+        { name:'苹果',src:'/images/s4.png',id:1},
+        { name:'梨',src:'/images/s5.png',id:2},
+        { name:'橘子',src:'/images/s6.png',id:3},
+        { name:'苹果',src:'/images/s4.png',id:1},
+        { name:'梨',src:'/images/s5.png',id:2},
+        { name:'橘子',src:'/images/s6.png',id:3},
+        { name:'苹果',src:'/images/s4.png',id:1},
+        { name:'梨',src:'/images/s5.png',id:2},
+        { name:'橘子',src:'/images/s6.png',id:3}
+      ],
       curIndex: 0,
-      isScroll: false,
+      isScroll: true,
       toView: 'guowei'
     }
     methods = {
@@ -60,83 +89,47 @@
   }
 </script>
 <style lang="less">
-  page,.main{height:100%;font-size: ~'32rpx';}
+  @import "../common/less/base";
   .categroy-left{
     float: left;
     width: ~'150rpx';
+    background:@eee;
     height: 100%;
-    border-right: 1px solid #ddd;
     box-sizing: border-box;
-  }
-  .categroy-left .cate-list{
-    height: ~'80rpx';
-    line-height: ~'80rpx';
-    text-align: center;
-    border-left: 3px solid #fff;
-  }
-  .categroy-left .cate-list.on{
-    color: #AB956D;
-    border-color: #AB956D;
+    .cate-list{
+      height: ~'80rpx';
+      line-height: ~'80rpx';
+      text-align: center;
+      border-bottom:~'1rpx solid #ddd';
+      font-size:~'26rpx';
+    }
+    .cate-list.on{
+      color: #AB956D;
+      background:@fff;
+    }
   }
   .categroy-right{
     float: right;
     width: ~'600rpx';
     height: 100%;
     overflow: hidden;
-
   }
   .cate-box{
     height: 100%;
-    padding:~'40rpx';
+    padding:~'30rpx';
     box-sizing: border-box;
-  }
-  .cate-box .cate-banner image{
-    display: block;
-    width: 100%;
-    height: ~'190rpx';
-  }
-  .cate-title{
-    position: relative;
-    height: ~'30rpx';
-    line-height: ~'30rpx';
-    padding:~'30rpx 0 55rpx';
-    text-align: center;
-    color: #AB956D;
-    font-size: ~'28rpx';
-  }
-  .cate-title::before{
-    position: absolute;
-    left: ~'130rpx';
-    top: ~'43rpx';
-    content: '';
-    width: ~'70rpx';
-    height: ~'4rpx';
-    background: #AB956D;
-  }
-  .cate-title::after{
-    position: absolute;
-    right: ~'130rpx';
-    top: ~'43rpx';
-    content: '';
-    width: ~'70rpx';
-    height: ~'4rpx';
-    background: #AB956D;
-  }
-
-  .product-list{
-    display: inline-block;
-    width: ~'160rpx';
-    height: ~'160rpx';
-    text-align: center;
-    margin:~'0 20rpx 20rpx 0';
-    font-size: ~'24rpx';
-  }
-  .product-list image{
-    width: ~'80rpx';
-    height: ~'80rpx';
-    margin-bottom: ~'20rpx';
-  }
-  .product-list:nth-child(3n){
-    margin-right: 0;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    .cate{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      image{
+        .wh(~'150rpx',~'150rpx');
+        margin: ~'12rpx 0';
+      }
+      .cate-title{.sc(~'24rpx',@333)}
+    }
   }
 </style>

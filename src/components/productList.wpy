@@ -2,8 +2,10 @@
   <repeat for="{{list}}">
     <navigator class="newest-list" data-goodsid="{{item.id}}" url="goodDetail">
       <image src="{{item.src}}"></image>
-      <view class="newest-text"><text>{{item.name}}</text></view>
-      <view class="newest-text"><text>￥{{item.price}}</text></view>
+      <view class="newest-text">
+        <text class="name">{{item.name}}</text>
+        <text class="price">￥{{item.price}}</text>
+      </view>
     </navigator>
   </repeat>
 </template>
@@ -19,24 +21,27 @@
   }
 </script>
 <style lang="less">
+  @import "../common/less/base";
   .newest-list{
-    display: inline-block;
-    width: ~'325rpx';
-    height: ~'325rpx';
-    margin:~'0 20rpx 20rpx 0';
-    border-radius: 10px;
-    text-align: center;
-    background: #f5f6f5;
-  }
-  .newest-box .newest-list:nth-child(2n){
-    margin-right: 0;
-  }
-  .newest-box .newest-list image{
-    width: ~'175rpx';
-    height: ~'175rpx';
-    margin: ~'20rpx 0 10rpx';
-  }
-  .newest-box .newest-list .newest-text{
-    font-size: ~'32rpx';
+    display:flex;
+    width:49%;
+    background: @fff;
+    flex-direction: column;
+    margin-bottom:~'16rpx';
+    image{
+      .wh(100%,~'350rpx');
+    }
+    .newest-text{
+      padding:~'20rpx';
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      .name{
+        .sc(~'28rpx',@333)
+      }
+      .price{
+        .sc(~'26rpx',@red)
+      }
+    }
   }
 </style>

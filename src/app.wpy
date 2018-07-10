@@ -1,4 +1,5 @@
 <style lang="less">
+  @import "common/less/base";
   page {
     height: 100%;
     font-size:~'32rpx';
@@ -6,6 +7,10 @@
     -webkit-box-sizing: border-box;
     .main{
       height:100%;
+      background: @eee;
+    }
+    .category{
+      background: @fff;
     }
   }
 </style>

@@ -1,30 +1,63 @@
 <template>
-  <view class="container">
+  <view class="main">
     <view wx:if="{{hasList}}" class="cart-box">
       <view>
-        <repeat for="{{carts}}">
-          <view class="cart-list">
-            <icon wx:if="{{item.selected}}" type="success" color="#AB956D" data-index="{{index}}" data-id="{{item.id}}" class="cart-pro-select" @tap="selectList"/>
-            <icon wx:else type="circle" class="cart-pro-select" data-index="{{index}}" data-id="{{item.id}}" @tap="selectList"/>
-            <navigator url="../details/details?id={{item.id}}"><image class="cart-thumb" src="{{item.src}}"></image></navigator>
-            <text class="cart-pro-name">{{item.title}}</text>
-            <text class="cart-pro-price">￥{{item.price}}</text>
-            <view class="cart-count-box">
-              <text class="cart-count-down" @tap="minusCount" data-index="{{index}}">-</text>
-              <text class="cart-count-num">{{item.num}}</text>
-              <text class="cart-count-add" @tap="addCount" data-index="{{index}}">+</text>
+        <view class="title"><text>我的购物车</text><text class="edit" @tap="editCart">{{operateText}}</text></view>
+        <repeat for="{{carts}}" index="idx">
+          <view class="cart-item">
+            <view class="shop-box">
+              <view class="select-box">
+                <icon wx:if="{{item.selected}}" type="success" color="#AB956D" data-index="{{idx}}" data-type="shop" @tap="selectList"/>
+                <icon wx:else type="circle" data-index="{{idx}}" data-type="shop" @tap="selectList"/>
+              </view>
+              <text class="shopName">{{item.shopName}} ></text>
             </view>
-            <text class="cart-del" @tap="deleteList" data-index="{{index}}">×</text>
+            <repeat for="{{item.goodsList}}">
+              <view class="cart-list">
+                <view class="select-box">
+                  <icon wx:if="{{item.selected}}" type="success" color="#AB956D" data-index="{{index}}" data-idx="{{idx}}" data-type="goods" @tap="selectList"/>
+                  <icon wx:else type="circle" data-index="{{index}}" data-idx="{{idx}}" data-type="goods" @tap="selectList"/>
+                </view>
+                <view class="img-box">
+                  <image src="{{item.src}}"></image>
+                </view>
+                <view class="detail">
+                  <text class="goods-name">{{item.title}}</text>
+                  <text class="goods-pro">{{item.skus}}</text>
+                  <text class="goods-price">￥{{item.price}}</text>
+                </view>
+                <wxc-counter number="{{item.num}}" max="{{720}}" min="1" data-index="{{index}}" data-idx="{{idx}}" data-selected="{{item.selected}}" @changenumber="getNum" class="count"></wxc-counter>
+              </view>
+            </repeat>
           </view>
         </repeat>
       </view>
-
-      <view class="cart-footer">
-        <icon wx:if="{{selectAllStatus}}" type="success_circle" color="#fff" class="total-select" @tap="selectAll"/>
-        <icon wx:else type="circle" color="#fff" class="total-select" @tap="selectAll"/>
-        <navigator url="../orders/orders"><view class="order-icon"></view></navigator>
-        <text>全选</text>
-        <text class="cart-toatl-price">订单总价：￥{{totalPrice}}</text>
+      <!--结算-->
+      <view wx:if="{{isCount}}" class="cart-footer">
+        <view class="footer-left">
+          <view class="left-item">
+            <view class="select-box">
+              <icon wx:if="{{selectAllStatus}}" type="success" color="#AB956D" class="total-select" @tap="selectAll"/>
+              <icon wx:else type="circle" class="total-select" @tap="selectAll"/>
+            </view>
+            <text>全选</text>
+          </view>
+          <text class="cart-toatl-price">订单总价：￥{{totalPrice}}</text>
+        </view>
+        <view class="footer-right">结算({{selectNum}})</view>
+      </view>
+      <!--删除管理-->
+      <view wx:else class="cart-footer">
+        <view class="footer-left">
+          <view class="left-item">
+            <view class="select-box">
+              <icon wx:if="{{selectAllStatus}}" type="success" color="#AB956D" class="total-select" @tap="selectAll"/>
+              <icon wx:else type="circle" class="total-select" @tap="selectAll"/>
+            </view>
+            <text>全选</text>
+          </view>
+        </view>
+        <view class="footer-right">删除({{selectNum}})</view>
       </view>
     </view>
     <view wx:else>
@@ -37,42 +70,77 @@
   import wepy from 'wepy'
   export default class Cart extends wepy.page {
     config = {
-      navigationBarTitleText: '购物车'
+      navigationBarTitleText: '购物车',
+      usingComponents: {
+        'wxc-counter': '../../packages/@minui/wxc-counter/dist/index',
+        'wxc-icon':'../../packages/@minui/wxc-icon/dist/index'
+      }
     };
     data = {
       carts:[],               // 购物车列表
       selectedArr:[],
       hasList:false,          // 列表是否有数据
       totalPrice:0,           // 总价，初始为0
-      selectAllStatus:false    // 全选状态，默认全选
+      selectAllStatus:false,    // 全选状态，默认全选
+      isCount:true,
+      operateText:'编辑',
+      selectNum:0,
     };
     onShow() {
       this.hasList = true
       this.carts = [
-        {id:1,title:'芹菜',src:'/images/s5.png',num:4,price:1.20,selected:false},
-        {id:2,title:'素米',src:'/images/s4.png',num:1,price:1.40,selected:false}
+        {
+          shopId:1,
+          shopName: '密西西比的果蔬店',
+          selected:false,
+          goodsList:[
+            {id:1,title:'芹菜',src:'/images/s5.png',num:4,price:1.20,skus:'包装-500g',selected:false},
+            {id:2,title:'素米',src:'/images/s4.png',num:1,price:1.40,skus:'10kg装',selected:false}
+          ]
+        },
+        {
+          shopId:2,
+          shopName: '都妈妈的水果店',
+          selected:false,
+          goodsList:[
+            {id:1,title:'瓜子',src:'/images/s6.png',num:4,price:2.70,skus:'包装-500g',selected:false}
+          ]
+        }
       ]
     };
     methods = {
-      /**
-       * 当前商品选中事件
-       */
-      selectList(e) {
-        let index = e.currentTarget.dataset.index;
-        let carts = this.data.carts;
-        let selected = carts[index].selected;
-        if(selected){
-          carts[index].selected = false
-          this.selectedArr.splice(index,1)
-          this.selectAllStatus = false
-        }else{
-          carts[index].selected = true
-          this.selectedArr.push(e.target.dataset.id)
+      //编辑购物车
+      editCart(){
+        if(this.isCount){
+          this.isCount = false
+          this.operateText = '保存'
+        }else {
+          this.isCount = true
+          this.operateText = '编辑'
         }
-        this.carts = carts
-        this.getTotalPrice();
       },
-
+      //当前商品选中事件
+      selectList(e) {
+        let type = e.target.dataset.type
+        let index = e.target.dataset.index
+        let idx = e.target.dataset.idx
+        let carts = this.carts
+         //选中整个店铺
+        if(type === 'shop') {
+          carts[index].selected = !carts[index].selected
+          carts[index].goodsList.forEach(val => {
+            val.selected = carts[index].selected
+          })
+          this.carts = carts
+        }else {
+          carts[idx].goodsList[index].selected = !carts[idx].goodsList[index].selected
+          this.carts = carts
+          //判断是否选中整个店铺
+          this.isStoreSelect(idx)
+        }
+        this.getTotalPrice()
+        this.isSelectAll()
+      },
       /**
        * 删除购物车当前商品
        */
@@ -92,18 +160,16 @@
        * 购物车全选事件
        */
       selectAll(e) {
-        let selectAllStatus = this.data.selectAllStatus;
-        selectAllStatus = !selectAllStatus;
-        let carts = this.data.carts;
-
-        for (let i = 0; i < carts.length; i++) {
-          carts[i].selected = selectAllStatus;
-        }
-        this.selectAllStatus = selectAllStatus
-        this.carts = carts
-        this.getTotalPrice();
+        this.selectAllStatus = !this.selectAllStatus
+        let state = this.selectAllStatus
+        this.carts.forEach(value => {
+          value.selected = state
+          value.goodsList.forEach(goodsVal => {
+            goodsVal.selected = state
+          })
+        })
+        this.getTotalPrice()
       },
-
       /**
        * 绑定加数量事件
        */
@@ -113,7 +179,7 @@
         let num = carts[index].num;
         num = num + 1;
         carts[index].num = num;
-        this.carts = carts
+       this.carts = carts
         this.getTotalPrice();
       },
 
@@ -131,21 +197,62 @@
         carts[index].num = num;
         this.carts = carts
         this.getTotalPrice();
+      },
+      getNum(e){
+        let selected = e.target.dataset.selected
+        let idx = e.target.dataset.idx
+        let index = e.target.dataset.index
+        this.carts[idx].goodsList[index].num = e.detail.number
+        if(selected){
+          this.getTotalPrice()
+        }
       }
     }
     /**
      * 计算总价
      */
     getTotalPrice() {
-      let carts = this.data.carts;                  // 获取购物车列表
-      let total = 0;
-      for(let i = 0; i<carts.length; i++) {         // 循环列表得到每个数据
-        if(carts[i].selected) {                     // 判断选中才会计算价格
-          total += carts[i].num * carts[i].price;   // 所有价格加起来
+      let price = 0,
+        num = 0,
+        inter = 0
+      this.carts.forEach( value => {
+        value.goodsList.forEach(goodsVal => {
+          if(goodsVal.selected) {
+            price += goodsVal.price * goodsVal.num
+            num +=  goodsVal.num
+          }
+        })
+      })
+      this.totalPrice = parseFloat(price).toFixed(2)
+      this.selectNum = num
+    };
+    //判断是否选中整个店铺
+    isStoreSelect(idx){
+      let flag = true
+      this.carts[idx].goodsList.forEach(val => {
+        if(!val.selected) {
+          flag = false
         }
+      })
+      if(flag) {
+        this.carts[idx].selected = true
+      }else {
+        this.carts[idx].selected = false
       }
-      this.carts = carts                            // 最后赋值到data中渲染到页面
-      this.totalPrice = total.toFixed(2)
+    };
+    //判断是否全选
+    isSelectAll () {
+      let flag = true;
+      this.carts.forEach(value=> {
+        if(!value.selected) {
+          flag = false;
+        }
+      })
+      if(flag){
+        this.selectAllStatus = true;
+      }else{
+        this.selectAllStatus = false;
+      }
     };
     watch = {
       selectedArr(newval){
@@ -161,55 +268,73 @@
   }
 </script>
 <style lang="less">
+  @import "../common/less/base";
+  .title{
+    padding:~'20rpx';
+    .sc(~'30rpx',#333);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .edit{.sc(~'26rpx',@999)}
+  }
   .cart-box{
     width: 100%;
     padding-bottom: ~'100rpx';
   }
+  .cart-item{
+    background: @fff;margin-bottom:~'20rpx' }
+  .shop-box{
+    padding:~'16rpx 20rpx';
+    display: flex;
+    border-bottom:~'1rpx solid #eee';
+    .select-box{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .shopName{.sc(~'26rpx',@333);padding-left:~'20rpx';display:flex;align-items:center;}
+  }
   .cart-list{
     position: relative;
-    padding: ~'20rpx 20rpx 20rpx 285rpx';
-    height: ~'185rpx';
-    border-bottom: 1px solid #e9e9e9;
-  }
-  .cart-list .cart-pro-select{
-    position: absolute;
-    left: ~'20rpx';
-    top: ~'90rpx';
-    width: ~'45rpx';
-    height: ~'45rpx';
-  }
-
-  .cart-list .cart-thumb{
-    position: absolute;
-    top: ~'20rpx';
-    left: ~'85rpx';
-    width: ~'185rpx';
-    height: ~'185rpx';
-  }
-  .cart-list .cart-pro-name{
-    display: inline-block;
-    width: ~'300rpx';
-    height: ~'105rpx';
-    line-height: ~'50rpx';
-    overflow: hidden;
-  }
-  .cart-list .cart-pro-price{
-    display: inline-block;
-    float: right;
-    height: ~'105rpx';
-    line-height: ~'50rpx';
-  }
-  .cart-list .cart-count-box{
-    position: absolute;
-    left: ~'285';
-    bottom: ~'20rpx';
-    width: ~'250rpx';
-    height: ~'80rpx';
-  }
-  .cart-list .cart-count-box text{
-    display: inline-block;
-    line-height: ~'80rpx';
-    text-align: center;
+    display: flex;
+    padding: ~'20rpx';
+    border-bottom:~'1rpx solid #eee';
+    background: @fff;
+    .select-box{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+    }
+    .img-box{.wh(~'200rpx',~'200rpx');margin:~'0 20rpx';image{width:100%;height:100%}}
+    .detail{
+      display:flex;
+      flex-direction: column;
+      justify-content: space-between;
+      .goods-name{
+        .sc(~'26rpx',@333)
+      }
+      .goods-pro{
+        .sc(~'24rpx',@999)
+      }
+      .goods-price{
+        display: flex;
+        justify-content: space-between;
+        .sc(~'26rpx',@red);
+        .num{
+          .sc(~'30rpx',@999);
+          position: absolute;
+          bottom: ~'20rpx';
+          right:~'20rpx';
+        }
+      }
+    }
+    .count{
+      position: absolute;
+      bottom:~'20rpx';
+      right:~'20rpx';
+    }
   }
   .cart-count-down,.cart-count-add{
     font-size: ~'44rpx';
@@ -219,51 +344,41 @@
   .cart-count-num{
     width: ~'150rpx';
   }
-  .cart-del{
-    position: absolute;
-    right: ~'20rpx';
-    bottom: ~'20rpx';
-    width: ~'80rpx';
-    height: ~'80rpx';
-    line-height: ~'80rpx';
-    text-align: center;
-    font-size: ~'44rpx';
-  }
   .cart-footer{
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 100%;
-    height: ~'90rpx';
-    line-height: ~'90rpx';
-    padding:~'0 100rpx 0 80rpx';
+    .wh(100%,~'90rpx');
     box-sizing: border-box;
-    background: #AB956D;
-    color: #fff;
-  }
-  .total-select{
-    position: absolute;
-    left: ~'20rpx';
-    top: ~'25rpx';
-    width: ~'45rpx';
-    height: ~'45rpx';
-  }
-  .order-icon{
-    position: absolute;
-    right: ~'40rpx';
-    top: ~'25rpx';
-    width: ~'45rpx';
-    height: ~'45rpx';
-    background-image: url(/images/icon3.png);
-    background-size: 100%;
-  }
-  .cart-toatl-price{
-    float: right;
-  }
-
-  .cart-no-data{
-    padding:~'40rpx 0';
-    color: #999;
-    text-align: center;
+    display: flex;
+    background: @fff;
+    .footer-left{
+      width:70%;
+      display: flex;
+      padding: ~'0 20rpx';
+      justify-content: space-between;
+      align-items: center;
+      .left-item{
+        display: flex;
+        align-items: center;
+        .sc(~'26rpx',@333);
+        .select-box{
+          display: flex;
+          align-items: center;
+          padding-right:~'20rpx';
+        }
+      }
+      .cart-toatl-price{
+        .sc(~'26rpx',@red)
+      }
+    }
+    .footer-right{
+      width:30%;
+      background:@themeColor;
+      .sc(~'30rpx',@fff);
+      display:flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 </style>

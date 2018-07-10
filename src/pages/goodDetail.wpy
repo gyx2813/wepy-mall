@@ -15,11 +15,23 @@
       <view class="goods-tab-nav {{curIndex === 1 ?'on':''}}" @tap="bindTap" data-index="1">产品参数</view>
       <view class="goods-tab-nav {{curIndex === 2 ?'on':''}}" @tap="bindTap" data-index="2">售后保障</view>
       <view class="goods-content">
-        <view wx:if="{{curIndex === 0}}">{{goods.detail}}</view>
+        <view wx:if="{{curIndex === 0}}">
+          <view class="goods-title">{{goods.detail}}</view>
+          <repeat for="{{imgUrls}}">
+            <image src="{{item.src}}" width="100%"></image>
+          </repeat>
+        </view>
         <view wx:if="{{curIndex === 1}}">{{goods.parameter}}</view>
         <view wx:if="{{curIndex === 2}}">{{goods.service}}</view>
       </view>
     </view>
+    <view class="bot-box">
+      <view class="shop-box"><wxc-icon size="40" type="shop"></wxc-icon>店铺</view>
+      <view class="cart-box"><wxc-icon size="40" type="cart" @tap="goCart"></wxc-icon>购物车</view>
+      <view class="cart-but" @tap="showPopup">加入购物车</view>
+      <view class="buy-but">立即购买</view>
+    </view>
+    <!--立即购买，加入购物车弹窗开始-->
     <wxc-popup class="J_Popup" animation-mode="bottom" align="bottom" locked="true" status="hide">
       <view class="popup__content">
         <view class="top-item">
@@ -30,6 +42,7 @@
             <text wx:if="{{!selected}}" class="select">请选择：尺码 颜色</text>
             <text wx:else class="select">已选择：{{pro1}} {{pro2}}</text>
           </view>
+          <wxc-icon size="40" type="close" class="close" color="#999" @tap="hidePopup"></wxc-icon>
         </view>
         <!--sku属性-->
         <view class="pro-item">
@@ -56,17 +69,19 @@
         <button class="btn" type="warn" size="default" @tap="hidePopup">确定</button>
       </view>
     </wxc-popup>
+    <!--立即购买，加入购物车弹窗结束-->
   </view>
 </template>
 
 <script>
   import wepy from 'wepy'
-  export default class Cart extends wepy.page {
+  export default class goodDetail extends wepy.page {
     config = {
       navigationBarTitleText: 'XXX产品',
       usingComponents: {
         'wxc-popup': '../../packages/@minui/wxc-popup/dist/index',
-        'wxc-counter': '../../packages/@minui/wxc-counter/dist/index'
+        'wxc-counter': '../../packages/@minui/wxc-counter/dist/index',
+        'wxc-icon':'../../packages/@minui/wxc-icon/dist/index'
       }
     };
     data = {
@@ -114,21 +129,11 @@
         num++;
         this.num = num
       },
-      //添加购物车（走接口）
-      addToCart() {
-        let self = this;
-        let num = this.data.num;
-        let total = this.data.totalNum
-        self.show = true
-        setTimeout( function() {
-          self.show = false,
-          self.scaleCart = true
-          setTimeout( function() {
-            self.scaleCart = false,
-            self.hasCarts = true,
-            self.totalNum = num + total
-          }, 200)
-        }, 300)
+      //去购物车
+      goCart() {
+        wx.switchTab({
+          url:'cart'
+        })
       },
       selectPro(e){
         this.selected = true
@@ -176,6 +181,7 @@
         position: absolute;
         .image{width:100%;height:100%}}
       .detail{display: flex;flex-direction:column;margin-left: ~'220rpx';padding: ~'10rpx 0'}
+      .close{position:absolute;right:0;top:~'10rpx';}
     }
     .pro-item{
       padding:~'30rpx 0 0 0';
@@ -196,6 +202,17 @@
     }
     .btn{margin-bottom:~'20rpx';}
   }
+   .bot-box{
+     height:44px;
+     position: fixed;bottom:0;left:0;
+     width: 100%;
+     background: @fff;
+     display:flex;
+     .shop-box{width:15%;text-align:center;.sc(~'24rpx',@333);display: flex;flex-direction: column;justify-content:center;}
+     .cart-box{width:15%;text-align:center;.sc(~'24rpx',@333);display: flex;flex-direction: column;justify-content:center;}
+     .cart-but{width:35%;background:darkorange;border-radius:0;.sc(~'30rpx',@fff);border:none;display:flex;justify-content: center;align-items: center}
+     .buy-but{width:35%;background:@themeColor;border-radius:0;.sc(~'30rpx',@fff);border:none;display:flex;justify-content: center;align-items: center}
+   }
   .goods-box{
     position: relative;
     text-align: center;
@@ -208,6 +225,7 @@
   .goods-tab-nav{
     display: inline-block;
     width: 33.33%;
+    background:@fff;
     height: ~'90rpx';
     line-height: ~'90rpx';
     border-bottom: 1px solid #ededed;
@@ -220,6 +238,12 @@
     border-bottom: ~'5rpx solid #bcaa8a';
   }
   .goods-content{
-    padding: ~'40rpx';
+    padding-bottom:50px;
+    image{width:100%;}
+    .goods-title{
+      padding: ~'20rpx';
+      background: @fff;
+      .sc(~'26rpx',@333)
+    }
   }
 </style>

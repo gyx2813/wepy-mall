@@ -1,38 +1,40 @@
 <template>
-  <!--顶部banner-->
-  <swiper indicator-dots="true" autoplay="true" interval="{{ interval }}" duration="{{ duration }}" circular="true" indicator-active-color="#fff">
-    <repeat for="{{imgUrls}}">
-      <swiper-item>
-        <image src="{{item.src}}" class="slide-image" width="100%" data-id="{{item.id}}" @tap="linkUrl"/>
-      </swiper-item>
-    </repeat>
-  </swiper>
-  <!--精选主题-->
-  <view class="selected">
-    <view class="select-title"><text>精选主题</text></view>
-    <view class="select-top">
-      <view class="select-top-small">
-        <navigator url="list?type=1">
-          <image src="/images/s1.png"></image>
-        </navigator>
+  <view class="main">
+    <!--顶部banner-->
+    <swiper indicator-dots="true" autoplay="true" interval="{{ interval }}" duration="{{ duration }}" circular="true" indicator-active-color="#fff">
+      <repeat for="{{imgUrls}}">
+        <swiper-item>
+          <image src="{{item.src}}" class="slide-image" width="100%" data-id="{{item.id}}" @tap="linkUrl"/>
+        </swiper-item>
+      </repeat>
+    </swiper>
+    <!--精选主题-->
+    <view class="selected">
+      <view class="select-title"><text>精选主题</text></view>
+      <view class="select-top">
+        <view class="select-top-small">
+          <navigator url="list?type=1">
+            <image src="/images/s1.png"></image>
+          </navigator>
+        </view>
+        <view class="select-top-small">
+          <navigator url="list?type=2">
+            <image src="/images/s2.png"></image>
+          </navigator>
+        </view>
       </view>
-      <view class="select-top-small">
-        <navigator url="list?type=2">
-          <image src="/images/s2.png"></image>
+      <view class="select-bottom">
+        <navigator url="list?type=3">
+          <image src="/images/s3.png"></image>
         </navigator>
       </view>
     </view>
-    <view class="select-bottom">
-      <navigator url="list?type=3">
-        <image src="/images/s3.png"></image>
-      </navigator>
-    </view>
-  </view>
-  <!--最新产品-->
-  <view class="newest">
-    <view class="newest-title"><text>最近新品</text></view>
-    <view class="newest-box">
-      <productList :list="productList"></productList>
+    <!--最新产品-->
+    <view class="newest">
+      <view class="newest-title"><text>最近新品</text></view>
+      <view class="newest-box">
+        <productList :list="productList"></productList>
+      </view>
     </view>
   </view>
 </template>
@@ -72,6 +74,7 @@
   }
 </script>
 <style lang="less">
+  @import "../common/less/base";
   swiper {
     height: ~'421.5rpx';
   }
@@ -84,6 +87,7 @@
     padding:~'30rpx 0';
     color: #AB956D;
     font-size: 16px;
+    background: @fff;
     text-align: center;
   }
   .select-top-small{
@@ -100,8 +104,10 @@
     width: 100%;
     height: 100%;
   }
-
   .newest-box{
-    padding:~'0 40rpx';
+    background: @eee;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
   }
 </style>
