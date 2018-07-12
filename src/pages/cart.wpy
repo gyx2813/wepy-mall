@@ -44,7 +44,7 @@
           </view>
           <text class="cart-toatl-price">订单总价：￥{{totalPrice}}</text>
         </view>
-        <view class="footer-right">结算({{selectNum}})</view>
+        <view class="footer-right" @tap="goFillOrder">结算({{selectNum}})</view>
       </view>
       <!--删除管理-->
       <view wx:else class="cart-footer">
@@ -88,6 +88,7 @@
     };
     onShow() {
       this.hasList = true
+      this.selectNum = 0
       this.carts = [
         {
           shopId:1,
@@ -109,6 +110,12 @@
       ]
     };
     methods = {
+      //结算
+      goFillOrder(){
+        wx.navigateTo({
+          url:'fillOrder'
+        })
+      },
       //编辑购物车
       editCart(){
         if(this.isCount){

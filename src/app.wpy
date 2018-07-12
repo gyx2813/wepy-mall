@@ -26,13 +26,17 @@ export default class extends wepy.app {
       'wxc-flex': '../packages/@minui/wxc-flex/dist/index',
     },
     pages: [
+      'pages/addressManage',
       'pages/index',
       'pages/category',
       'pages/cart',
       'pages/user',
       'pages/list',
       'pages/goodDetail',
-      'pages/myOrder'
+      'pages/myOrder',
+      'pages/fillOrder',
+
+      'pages/addNew'
     ],
     window: {
       backgroundTextStyle: 'light',

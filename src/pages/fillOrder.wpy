@@ -1,0 +1,176 @@
+<template>
+  <view class="main">
+    <view class="address" @tap="goAddManage">
+      <view class="item"><wxc-icon size="44" type="address" color="#999"></wxc-icon><text>请填写收货地址</text></view>
+      <wxc-icon size="30" type="arrow-right" color="#999"></wxc-icon>
+    </view>
+    <view class="order-box">
+      <view class="head"><text class="shopName">马明阳的小店</text></view>
+      <view class="goods-box">
+        <view class="img-box"><image src="../images/s4.png"></image></view>
+        <view class="detail">
+          <text class="goods-name">条纹青中年衬衫长袖宽松</text>
+          <text class="goods-pro">颜色：红色-尺码：L</text>
+          <view class="goods-price"><text>￥186.00</text><text class="num">×1</text></view>
+        </view>
+      </view>
+      <view class="box-item">
+        <text>配送方式</text>
+        <text>快递免邮</text>
+      </view>
+      <view class="words-box">
+        <text>买家留言：</text>
+        <input type="text" placeholder="填写内容已和卖家协商确认" />
+      </view>
+      <view class="box-item">
+        <text>共一件商品</text>
+        <view>小计：<text class="price">￥186.00</text></view>
+      </view>
+      <view class="box-item connect">
+        <text>联系商家 15690998888</text>
+        <view class="btn">直接拨打</view>
+      </view>
+    </view>
+    <view class="footer-box">
+      <view class="footer-left">
+        <view class="left-item">
+          合计金额：<text>￥186.00</text>
+        </view>
+      </view>
+      <view class="footer-right">提交订单</view>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class fillOrder extends wepy.page {
+    config = {
+      navigationBarTitleText: '确定订单',
+      usingComponents:{
+        'wxc-icon':'../../packages/@minui/wxc-icon/dist/index'
+      }
+    };
+    methods = {
+      goAddManage(){
+        wx.navigateTo({
+          url:'addressManage'
+        })
+      }
+    }
+  }
+</script>
+<style lang="less">
+  @import '../common/less/base';
+  .address{
+    display:flex;
+    .sc(~'26rpx',@999);
+    background:@fff;
+    padding: ~'20rpx';
+    height: ~'100rpx';
+    justify-content: space-between;
+    align-items: center;
+    .item{display:flex;align-items:center}
+    text{padding-left:~'10rpx'}
+  }
+  .order-box{
+    background:@fff;
+    margin-top: ~'20rpx';
+    .head{
+      padding:~'16rpx 20rpx';
+      display: flex;
+      justify-content: space-between;
+      .shopName{.sc(~'26rpx',@333)}
+      border-bottom:~'1rpx solid #eee';
+    }
+    .words-box{
+      display: flex;
+      padding: ~'20rpx';
+      align-items: center;
+      height: ~'40rpx';
+      .sc(~'26rpx',@333);
+      border-top: ~'1rpx solid #eee';
+      input{width:80%;}
+    }
+    .box-item{
+      display: flex;
+      padding: ~'20rpx';
+      justify-content: space-between;
+      height: ~'40rpx';
+      align-items: center;
+      .sc(~'26rpx',@333);
+      border-top: ~'1rpx solid #eee';
+      .price{.sc(~'26rpx',@red);}
+      .btn{
+        height:~'40rpx';
+        .sc(~'22rpx',@999);
+        border:~'1rpx solid #999';
+        text-align: center;
+        padding: ~'0 10rpx';
+        border-radius:~'6rpx';
+        line-height: ~'40rpx';
+      }
+    }
+    .connect{border-top:~'20rpx solid #eee';}
+    .goods-box{
+      background: @fff;
+      padding:~'20rpx';
+      display: flex;
+      position: relative;
+      border-top:~'5rpx solid #fff';
+      .img-box{.wh(~'200rpx',~'200rpx');margin-right:~'20rpx';image{width:100%;height:100%}}
+      .detail{
+        display:flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .goods-name{
+          .sc(~'26rpx',@333)
+        }
+        .goods-pro{
+          .sc(~'24rpx',@999)
+        }
+        .goods-price{
+          display: flex;
+          justify-content: space-between;
+          .sc(~'26rpx',@red);
+          .num{
+            .sc(~'30rpx',@999);
+            position: absolute;
+            bottom: ~'20rpx';
+            right:~'20rpx';
+          }
+        }
+      }
+    }
+  }
+  .footer-box{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    .wh(100%,~'90rpx');
+    box-sizing: border-box;
+    display: flex;
+    background: @fff;
+    .footer-left{
+      width:70%;
+      display: flex;
+      padding: ~'0 20rpx';
+      justify-content: space-between;
+      align-items: center;
+      .left-item{
+        display: flex;
+        align-items: center;
+        .sc(~'26rpx',@333);
+        text{
+          color: @red;}
+      }
+    }
+    .footer-right{
+      width:30%;
+      background:@themeColor;
+      .sc(~'30rpx',@fff);
+      display:flex;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+</style>

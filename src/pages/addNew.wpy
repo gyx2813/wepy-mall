@@ -1,0 +1,82 @@
+<template>
+  <view class="main">
+    <view class="add-box">
+      <wxc-input type="text" title="收货人" placeholder="请输入收货人姓名"></wxc-input>
+      <wxc-input type="number" title="联系电话" placeholder="请输入手机号"></wxc-input>
+      <!--省市区选择器-->
+      <picker mode="region" @change="bindRegionChange" value="{{region}}">
+        <view class="picker">
+          <text class="title">所在地区</text><text class="{{selectCityStr === '请设置所在区域' ? 'placeholder' : 'text'}}">{{selectCityStr}}</text>
+        </view>
+      </picker>
+      <wxc-input type="text" title="详细地址" mode="none" placeholder="请输入详细地址"></wxc-input>
+    </view>
+    <view class="select-box">
+      <text>设为默认地址</text>
+      <view>
+        <icon wx:if="{{isSelect}}" type="success" color="#AB956D" class="total-select" @tap="select"/>
+        <icon wx:else type="circle" class="total-select" @tap="select"/>
+      </view>
+    </view>
+    <view class="btn-box">
+      <button type="primary" size="small" hover-class="none">保存</button>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class addNew extends wepy.page {
+    config = {
+      navigationBarTitleText: '新增地址',
+      usingComponents: {
+        'wxc-input': '../../packages/@minui/wxc-input/dist/index'
+      }
+    };
+    data = {
+      isSelect:false,
+      region: ['广东省', '广州市', '海珠区'],
+      selectCityStr: '请设置所在区域'
+    };
+    methods = {
+      select(){
+        this.isSelect = !this.isSelect
+      },
+      bindRegionChange(e){
+        this.selectCityStr = e.detail.value
+      }
+    }
+  }
+</script>
+<style lang="less">
+  @import "../common/less/base";
+  .add-box{
+    background:@fff;
+    .picker{
+      display: flex;
+      padding: ~'24rpx 30rpx';
+      border-bottom: ~'1rpx solid #eee';
+      .sc(~'28rpx',@333);
+      .title{
+        width:~'163rpx';
+      }
+      .placeholder{.sc(~'28rpx',@999)}
+      .text{.sc(~'32rpx',@333)}
+    }
+  }
+  .select-box{
+    background: @fff;
+    padding: ~'24rpx 30rpx';
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    .sc(~'26rpx',@333);
+    margin-top: ~'20rpx';
+  }
+  .btn-box{
+    padding:~'24rpx 30rpx';
+    button{
+      background:@themeColor;
+      .sc(~'30rpx',@fff)
+    }
+  }
+</style>
