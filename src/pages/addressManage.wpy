@@ -10,11 +10,11 @@
     </view>
     <view wx:else>
       <view class="address">
-        <view class="add-box">
+        <view class="add-box" @tap="go">
           <view class="name-tel"><text class="name">郭永鑫</text><text>18354298317</text></view>
           <view class="add"><text class="default">[默认地址]</text>福建省莆田市荔城区辰门兜小区1号1602边说边地骄傲滴看的空间呢</view>
         </view>
-        <wxc-icon type="arrow-right" color="#999" size="30" class="arrow-right"></wxc-icon>
+        <wxc-icon type="arrow-right" color="#999" size="30" class="arrow-right" @tap="goEdit()"></wxc-icon>
       </view>
     </view>
   </view>
@@ -36,6 +36,14 @@
          wx.navigateTo({
            url:'addNew'
          })
+      },
+      go(){
+          console.log(1111)
+      },
+      goEdit(){
+        wx.navigateTo({
+          url:'editAdd'
+        })
       }
     }
   }
@@ -67,10 +75,11 @@
     justify-content: space-between;
     align-items: center;
     .add-box{
+      padding-right:~'30rpx';
       .name-tel{.sc(~'30rpx',@333);
         padding-bottom:~'20rpx';.name{padding-right:~'20rpx'}}
       .add{.sc(~'26rpx',@999);.default{.sc(~'26rpx',@themeColor)}}
     }
-    .arrow-right{padding-left:~'50rpx'}
+    .arrow-right{padding-left:~'20rpx'}
   }
 </style>

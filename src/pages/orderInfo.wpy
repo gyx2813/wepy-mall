@@ -1,0 +1,239 @@
+<template>
+  <view class="main">
+    <view class="orderInfoBox">
+      <view class="order-info">
+        <view class="order-state">
+          <text class="state">待付款</text>
+          <text class="time">请在07月15号 11:27分前完成支付</text>
+        </view>
+        <view class="order-add">
+          <wxc-icon size="44" type="address" color="#999"></wxc-icon>
+          <view class="addInfo">
+            <view class="name-tel"><text>收件人：郭永鑫</text><text>18750036477</text></view>
+            <text class="info">收件地址：福建省莆田市荔城区辰门兜小区1号1602边说边地骄傲滴看的空间呢</text>
+          </view>
+        </view>
+      </view>
+      <view class="order-box">
+        <view class="head"><text class="shopName">子恒与子文的小店 ></text><text class="orderState">待付款</text></view>
+        <view class="goods-box">
+          <view class="img-box"><image src="../images/goods1.png"></image></view>
+          <view class="detail">
+            <text class="goods-name">蕾丝连衣裙女夏2018款大码</text>
+            <text class="goods-pro">颜色：白色-尺码：M</text>
+            <view class="goods-price"><text>￥175.00</text><text class="num">×1</text></view>
+          </view>
+        </view>
+        <view class="goods-box">
+          <view class="img-box"><image src="../images/s4.png"></image></view>
+          <view class="detail">
+            <text class="goods-name">条纹青中年衬衫长袖宽松</text>
+            <text class="goods-pro">颜色：红色-尺码：L</text>
+            <view class="goods-price"><text>￥186.00</text><text class="num">×1</text></view>
+          </view>
+        </view>
+        <view class="total">
+          <view class="item price"><text>商品金额</text><text>￥361.00</text></view>
+          <view class="item express"><text>运费（快递）</text><text>￥0</text></view>
+          <view class="item total-money"><text>订单总价</text><text>￥361.00</text></view>
+        </view>
+        <view class="actAmount">
+          <text>实付款：</text><text class="actPrice">￥361.00</text>
+        </view>
+        <view class="connect">
+          <text>联系商家 15690998888</text>
+          <view class="btn">直接拨打</view>
+        </view>
+        <view class="empty"></view>
+      </view>
+      <wxc-dialog class="wxc-dialog" title="提示" content="{{content}}" confirm-text="确定" cancel-text="取消" @confirm="onConfirm" @cancel="hidePop"></wxc-dialog>
+      <view class="btn-box">
+        <button size="mini" plain class="btn-pri">立即付款</button>
+        <button class="btn-info"  size="mini" plain="true" @tap="showPop" data-state="1">取消订单</button>
+      </view>
+    </view>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import productList from '@/components/productList'
+  export default class orderInfo extends wepy.page {
+    config = {
+      navigationBarTitleText: '订单详情',
+      usingComponents: {
+        'wxc-dialog': '../../packages/@minui/wxc-dialog/dist/index',
+        'wxc-icon': '../../packages/@minui/wxc-icon/dist/index'
+      }
+    };
+    data = {
+      curIndex: 0,
+      isShow:false,
+      //弹窗
+      content:'',
+      state:null
+    };
+    methods = {
+      bindTap(e) {
+        let index = parseInt(e.currentTarget.dataset.index);
+        this.curIndex = index
+      },
+      lower(){
+        this.isShow = true
+      },
+      showPop(e){
+        this.state = e.target.dataset.state
+        //console.log(typeof this.state)
+        if(this.state == 1){
+          this.content = '确定取消订单嘛？'
+        }else if(this.state == 2){
+          this.content = '确定删除订单嘛？'
+        }
+        let dialogComponent = this.$wxpage.selectComponent('.wxc-dialog')
+        dialogComponent && dialogComponent.show();
+      },
+      hidePop(){
+        let dialogComponent = this.$wxpage.selectComponent('.wxc-dialog')
+        dialogComponent && dialogComponent.hide();
+      },
+      onConfirm(){
+        if(this.state == 1){
+          console.log('确定取消！')
+        }else if(this.state == 2){
+          console.log('确定删除！')
+        }
+      }
+    }
+    components = {
+      productList:productList
+    }
+  }
+</script>
+<style lang="less">
+  @import "../common/less/base";
+  .orderInfoBox{
+    .order-info{
+      background: @fff;
+      .order-state{
+        padding: ~'30rpx 0';
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        border-bottom:~'1rpx solid #eee';
+        .state{.sc(~'30rpx',@red);padding-bottom:~'20rpx'}
+        .time{.sc(~'24rpx',@999)}
+      }
+      .order-add{
+        display: flex;
+        padding: ~'20rpx';
+        .addInfo{
+          padding-left: ~'20rpx';
+          .name-tel{.sc(~'28rpx',@333);display: flex;justify-content: space-between;padding-bottom:~'10rpx'}
+          .info{.sc(~'24rpx',@666)}
+        }
+      }
+    }
+  }
+  .order-box{
+    width:100%;
+    background:@fff;
+    margin-top:~'20rpx';
+    .head{width:100%;padding:~'16rpx 20rpx';
+      display: flex;
+      border-bottom:~'1rpx solid #eee';
+      justify-content: space-between;
+      box-sizing: border-box;
+      .shopName{.sc(~'26rpx',@333)}
+      .orderState{.sc(~'26rpx',@red)}
+    }
+    .goods-box{
+      background: @fff;
+      padding:~'20rpx';
+      display: flex;
+      position: relative;
+      border-bottom:~'1rpx solid #eee';
+      .img-box{.wh(~'200rpx',~'200rpx');margin-right:~'20rpx';image{width:100%;height:100%}}
+      .detail{
+        display:flex;
+        flex-direction: column;
+        justify-content: space-between;
+        .goods-name{
+          .sc(~'26rpx',@333)
+        }
+        .goods-pro{
+          .sc(~'24rpx',@999)
+        }
+        .goods-price{
+          display: flex;
+          justify-content: space-between;
+          .sc(~'26rpx',@333);
+          .num{
+            .sc(~'30rpx',@999);
+            position: absolute;
+            bottom: ~'20rpx';
+            right:~'20rpx';
+          }
+        }
+      }
+    }
+    .total{
+      padding: ~'20rpx';
+      border-bottom: ~'1rpx solid #eee';
+      .price{
+        .sc(~'26rpx',@999);
+        padding-bottom: ~'5rpx';
+      }
+      .express{
+        .sc(~'26rpx',@999);
+        padding-bottom: ~'5rpx';
+      }
+      .total-money{
+        .sc(~'30rpx',@333);
+      }
+      .item{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+    }
+    .actAmount{
+      display: flex;
+      justify-content: space-between;
+      padding: ~'20rpx';
+      .sc(~'30rpx',@333);
+      .actPrice{color: @red}
+    }
+    .connect{
+      display: flex;
+      padding: ~'20rpx';
+      justify-content: space-between;
+      height: ~'40rpx';
+      align-items: center;
+      .sc(~'26rpx',@333);
+      border-top:~'20rpx solid #eee';
+      .btn{
+        height:~'40rpx';
+        .sc(~'22rpx',@999);
+        border:~'1rpx solid #999';
+        text-align: center;
+        padding: ~'0 10rpx';
+        border-radius:~'6rpx';
+        line-height: ~'40rpx';
+      }
+    }
+    .empty{height:~'120rpx';background: #eee;}
+  }
+  .btn-box{
+    padding: ~'20rpx';
+    width: 100%;
+    box-sizing: border-box;
+    position: fixed;
+    background: @fff;
+    bottom: 0;
+    left: 0;
+    height: ~'100rpx';
+    .btn-info{border:1px solid @999;float: right;color: @999}
+    .btn-pri{border:1px solid @themeColor;margin-left:~'20rpx';color:@themeColor;float: right}
+  }
+</style>

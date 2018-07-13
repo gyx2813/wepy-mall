@@ -1,7 +1,14 @@
 <template>
   <view class="main">
     <view class="address" @tap="goAddManage">
-      <view class="item"><wxc-icon size="44" type="address" color="#999"></wxc-icon><text>请填写收货地址</text></view>
+      <view class="item">
+        <wxc-icon size="44" type="address" color="#999"></wxc-icon>
+        <text wx:if="{{!hasAdd}}">请填写收货地址</text>
+        <view wx:else class="addInfo">
+          <view class="name-tel"><text>收件人：郭永鑫</text><text>18750036477</text></view>
+          <text class="info">收件地址：福建省莆田市荔城区辰门兜小区1号1602边说边地骄傲滴看的空间呢</text>
+        </view>
+      </view>
       <wxc-icon size="30" type="arrow-right" color="#999"></wxc-icon>
     </view>
     <view class="order-box">
@@ -50,6 +57,9 @@
         'wxc-icon':'../../packages/@minui/wxc-icon/dist/index'
       }
     };
+    data = {
+      hasAdd:true
+    }
     methods = {
       goAddManage(){
         wx.navigateTo({
@@ -66,10 +76,19 @@
     .sc(~'26rpx',@999);
     background:@fff;
     padding: ~'20rpx';
-    height: ~'100rpx';
     justify-content: space-between;
     align-items: center;
-    .item{display:flex;align-items:center}
+    .item{
+      display:flex;align-items:center;
+      .addInfo{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding-right: ~'50rpx';
+        .name-tel{.sc(~'28rpx',@333);display: flex;justify-content: space-between;padding-bottom:~'10rpx'}
+        .info{.sc(~'24rpx',@666)}
+      }
+    }
     text{padding-left:~'10rpx'}
   }
   .order-box{

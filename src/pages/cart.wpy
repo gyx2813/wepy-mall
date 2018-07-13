@@ -88,6 +88,7 @@
     };
     onShow() {
       this.hasList = true
+      this.selectAllStatus = false
       this.selectNum = 0
       this.carts = [
         {

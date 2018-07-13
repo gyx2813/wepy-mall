@@ -7,7 +7,7 @@
       <view class="goods-tab-nav {{curIndex === 3 ?'on':''}}" @tap="bindTap" data-index="3">待收货</view>
       <scroll-view class="goods-content" scroll-y lower-threshold="50" @scrolltolower="lower">
         <view wx:if="{{curIndex === 0}}">
-          <view class="order-box">
+          <view class="order-box" @tap="goOrderInfo()">
             <view class="head"><text class="shopName">子恒与子文的小店 ></text><text class="orderState">待付款</text></view>
             <view class="goods-box">
               <view class="img-box"><image src="../images/goods1.png"></image></view>
@@ -104,6 +104,11 @@
         }else if(this.state == 2){
           console.log('确定删除！')
         }
+      },
+      goOrderInfo(){
+        wx.navigateTo({
+          url:'orderInfo'
+        })
       }
     }
     components = {

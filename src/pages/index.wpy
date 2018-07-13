@@ -70,6 +70,18 @@
 //    }
     components = {
       productList:productList
+    };
+//    onLoad(){
+//      this.getGoodsList()
+//    }
+    getGoodsList(){
+      let data = {
+        userToken: '49e0ba92901e469ea30c07ff011e1f17',
+        page:'1'
+      }
+      wepy.request('http://192.168.1.83:8067/seller/goods/list',data).then(res=>{
+          console.log(res)
+      })
     }
   }
 </script>
